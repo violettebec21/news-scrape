@@ -1,20 +1,8 @@
 var express = require("express");
 //express here is node middleware
-// var handlebars = require("express-handlebars");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 //mongoose is our mongo ORM
-
-// Our scraping tools
-// Axios is a promised-based http library, similar to jQuery's Ajax method
-// It works on the client and on the server
-var axios = require("axios");
-  //allows our network/ajax calls
-var cheerio = require("cheerio");
-
-// Require all models
-  //by default, when we do not specify file, collects index.js (whatever is exported in index.js)
-var db = require("./models");
 
 var PORT = 3000;
 
@@ -25,10 +13,19 @@ var app = express();
 
 // Use morgan logger for logging requests
 app.use(logger("dev"));
-// Parse request body as JSON
+// Parse request body as JSON (lines 30 & 31)
   //req.body -> body parser allows this breakout
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Set Handlebars.
+//import handlebars from npm package
+var exphbs = require("express-handlebars");
+
+//set view engine
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 // Make public a static folder
   //setting static directory/"starting point"
 app.use(express.static("public"));
@@ -37,92 +34,8 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/becnews", { useNewUrlParser: true });
 
 // Routes
-
-// A GET route for scraping the echoJS website
-app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with axios (network calls)
-  axios.get("https://www.theverge.com/tech").then(function(response) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
-
-    // Now, we grab every h2 within an div tag, and do the following:
-    $("div h2").each(function(i, element) {
-      // Save an empty result object
-      var result = {};
-
-      // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this)
-        .children("a")
-        .text();
-      // result.summary = $(this)
-      //   .children("a")
-      //   .text();
-      result.link = $(this)
-        .children("a")
-        .attr("href");
-
-      // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          // View the added result in the console
-          console.log(dbArticle);
-        })
-        .catch(function(err) {
-          // If an error occurred, log it
-          console.log(err);
-        });
-    });
-
-    // Send a message to the client
-    res.send("Scrape Complete");
-  });
-});
-
-// Route for getting all Articles from the db
-app.get("/articles", function(req, res) {
-  // TODO: Finish the route so it grabs all of the articles
-  db.Article.find({}).then(function (articles){
-    console.log(articles);
-  // Send a message to the client
-  res.json(articles);
-    // If an error occurred, log it
-  }).catch(function(err){
-      console.log(err);
-      //handles errors, throw error to frontend so the UI can display for the user
-      throw new Error(err)
-  })
-});
-
-// Route for grabbing a specific Article by id, populate it with it's comment
-// /articles/12345 => req.params.id = 12345
-app.get("/articles/:id", function(req, res) {
-  // TODO
-  // ====
-   // Finish the route so it finds one article using the req.params.id,
-  // and run the populate method with "comment",
-  // then responds with the article with the comment included
-  db.Article.findOne({_id: req.params.id})
-      // Specify that we want to populate the retrieved User with any associated comments
-    .populate("comment")
-    .then(function(dbUser) {
-      // If any Users are found, send them to the client with any associated Comments
-      res.json(dbUser);
-    })
-    .catch(function(err) {
-      // If an error occurs, send it back to the client
-      res.json(err);
-      // throw new Error(err.message)
-    });
-});
-
-// Route for saving/updating an Article's associated Comment
-app.post("/articles/:id", function(req, res) {
-  // TODO
-  // ====
-  // save the new comment that gets posted to the Comments collection
-  // then find an article from the req.params.id
-  // and update it's "comment" property with the _id of the new comment
-});
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
 
 // Start the server
 app.listen(PORT, function() {
