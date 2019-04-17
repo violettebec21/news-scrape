@@ -1,7 +1,10 @@
 <header class="p-5 text-center">
     <h1>Bec's Tech News</h1>
     <h2>Tech news scraped from The Verge</h2>
-    <h1>{{message}}</h1>
+    <h4>{{message}}</h>
+        <br>
+        <a href="/articles" class="btn btn-dark btn-lg btn-block" role="button" aria-disabled="true">Scrape + Get
+            Articles</a>
 </header>
 
 <div class="row pb-5">
@@ -11,42 +14,41 @@
                 {{#each articles}}
                 <div class="row">
                     <div class="col-sm">
-                       <div class="card" style="width: 18rem;">
+                        <div class="card" style="width: 18rem;">
                             <img class="card-img-top" src="/logo.png" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title"><a href={{this.title}}></a></h5>
-                                    <p class="card-text">{{this.title}}</p>
+                                <p class="card-text">{{this.title}}</p>
                                 <a href="{{this.link}}" class="btn btn-primary">Go to article</a>
                             </div>
                         </div>
                     </div>
-                    
                     <br>
                     <div class="col-sm">
                         <div class="card" style="width: 18rem;">
                             <img class="card-img-top" src="/logo.png" alt="Card image cap">
                             <div class="card-body">
-                                    <h5 class="card-title"><a href={{this.title}}></a></h5>
-                                    <p class="card-text">{{this.title}}</p>
-                                    <a href="{{this.link}}" class="btn btn-primary">Go to article</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="/logo.png" alt="Card image cap">
-                            <div class="card-body">
-                                    <h5 class="card-title"><a href={{this.title}}></a></h5>
-                                    <p class="card-text">{{this.title}}</p>
-                                    <a href="{{this.link}}" class="btn btn-primary">Go to article</a>
-                                </div>
+                                <h5 class="card-title"><a href={{this.title}}></a></h5>
+                                <p class="card-text">{{this.title}}</p>
+                                <a href="{{this.link}}" class="btn btn-primary">Go to article</a>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    
-                    {{/each}}
+                    <div class="col-sm">
+                        <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" src="/logo.png" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title"><a href={{this.title}}></a></h5>
+                                <p class="card-text">{{this.title}}</p>
+                                <a href="{{this.link}}" class="btn btn-primary">Go to article</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="comments"></div>
+                <br>
+
+                {{/each}}
             </div>
+            <div id="comments"></div>
         </div>
+    </div>

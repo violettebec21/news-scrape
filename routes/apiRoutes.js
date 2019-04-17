@@ -34,13 +34,11 @@ app.get("/scrape", function(req, res) {
           .children("a")
           .attr("href");
 
-        // //scrape img from separate div
-        //   $(".c-entry-box--compact__image").each(function(i, element) {
-        //     // Save an empty result object
-        //     var result = {};
-        //   result.image = $(this)
-        //   .children("img")
-        // //   .attr("src");
+        //scrape img from separate div
+          $("img.c-dynamic-image").$element.attr("src")
+            // Save an empty result object
+          result.image = $(this)
+          .attr("src");
   
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
