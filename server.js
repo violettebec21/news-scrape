@@ -31,8 +31,10 @@ app.set("view engine", "handlebars");
   //setting static directory/"starting point"
 app.use(express.static("public"));
 
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/becnews";
+
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/becnews", { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 require("./routes/apiRoutes")(app);
